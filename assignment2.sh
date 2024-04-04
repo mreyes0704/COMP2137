@@ -1,7 +1,7 @@
 #!/bin/bash
 #1. Netlan System Modification
 # Check if the netplan configuration file exists
-netplan_file="/etc/netplan/50-cloud-init.yaml"
+netplan_file="/etc/netplan/01-network-manager-all.yaml"
 if [ ! -f "$netplan_file" ]; then
     echo "Netplan configuration file not found: $netplan_file"
     exit 1
