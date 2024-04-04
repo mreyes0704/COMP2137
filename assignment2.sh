@@ -1,34 +1,35 @@
 #!/bin/bash
 #1. Netlan System Modification
-# Check if the netplan configuration file exists
-netplan_file="/etc/netplan/01-network-manager-all.yaml"
-if [ ! -f "$netplan_file" ]; then
-    echo "Netplan configuration file not found: $netplan_file"
-    exit 1
-fi
+update_netplan_config() {
+    cat <<EOF | sudo tee /etc/netplan/01-network-manager-all.yaml > /dev/null
+network:
+  version: 2
+  ethernets:
+      eth1:
+      addresses: [192.168.16.21/24] 
+      gateway4: 192.168.16.1 
+           
+EOF
+}
+# Update /etc/hosts File
+update_hosts_file() {
+    sudo sed -i '/192.168.16.21/d' /etc/hosts # Remove old entry
+    echo "192.168.16.21   server1" | sudo tee -a /etc/hosts > /dev/null # Add new entry
+}
 
-# Define the new configuration for the 192.168.16 network interface
-new_config="  addresses:
-    - 192.168.16.21/24
-  gateway4: 192.168.16.2
-  nameservers:
-    addresses: [192.168.16.2]
-    search: [home.arpa, localdomain]"
+# To apply netplan
+apply_changes() {
+    sudo netplan apply 
+    sudo systemctl restart networking 
+}
 
-# Define the private management network interface
-private_mgmt_interface="eth0"  # Replace with the actual interface name
-
-# Update netplan configuration with the new configuration
-sudo sed -i "/$private_mgmt_interface/,/^$/!b;/^$/i$new_config" "$netplan_file"
-
-# Update /etc/hosts file
-sudo sed -i '/^192\.168\.16\.21[[:space:]]\+server1$/d' /etc/hosts  # Remove ol>
-echo "192.168.16.21    server1" | sudo tee -a /etc/hosts >/dev/null  # Add new >
-
-# Apply netplan configuration
-sudo netplan apply
-
-echo "Configuration updated successfully."
+echo "Updating Netplan configuration..."
+update_netplan_config
+echo "Updating /etc/hosts file..."
+update_hosts_file
+echo "Applying changes..."
+apply_changes
+echo "Configuration completed."
 
 # 2. Apache and squid proxy app installation in defaualt configuration
 # Install and update apache2
