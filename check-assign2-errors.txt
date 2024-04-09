@@ -1,2 +1,0 @@
-Error: Failed checking instance exists "local:openwrt": Instance not found
-WARNING:root:Cannot call Open vSwitch: ovsdb-server.service is not running.
