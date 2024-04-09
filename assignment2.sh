@@ -31,6 +31,9 @@ echo "Applying changes..."
 apply_changes
 echo "Configuration completed."
 
+
+>>>>>>> 8c44135 (This is a script for Linux configure-host.sh)
+
 # 2. Apache and squid proxy app installation in defaualt configuration
 # Install and update apache2
 sudo apt update
