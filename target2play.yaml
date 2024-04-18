@@ -8,8 +8,14 @@
         state: present
         update_cache: yes
 
-    - name: enable ufw
+    - name: enable Firewall using ufw
       apt:
+        name: ufw
+        state: present
+        
+  tasks:
+    - name: Ensure UFW is installed
+      package:
         name: ufw
         state: present
 
