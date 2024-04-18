@@ -14,7 +14,7 @@
         enabled: yes
         state: started
         
-    - name: enable ufw
+    - name: enable Firewall using ufw
       apt:
         name: ufw
         state: present
